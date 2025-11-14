@@ -1,0 +1,51 @@
+import pygame
+
+        screen_width = 1000
+        screen_height = 600
+        screen = pygame.display.set_mode((screen_width, screen_height))
+        pygame.display.set_caption("Skbidi")
+#why did I do this to myself 💔🥀
+player_x = 350
+player_y = 450
+player_speed = 5
+player_width = 50
+player_height = 50
+player_color = (0, 128, 255)
+
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_LEFT]:
+        player_x -= player_speed
+    if keys[pygame.K_RIGHT]:
+        player_x += player_speed
+    if keys[pygame.K_UP]:
+        player_y -= player_speed
+    if keys[pygame.K_DOWN]:
+        player_y += player_speed
+
+ 
+    if player_x < 0:
+        player_x = 0
+    if player_x > SCREEN_WIDTH - player_width:
+        player_x = SCREEN_WIDTH - player_width
+    if player_y < 0:
+        player_y = 0
+    if player_y > SCREEN_HEIGHT - player_height:
+        player_y = SCREEN_HEIGHT - player_height
+
+    screen.fill((210, 92, 35))
+    pygame.draw.rect(screen, player_color, (player_x, player_y, player_width, player_height))
+
+    
+    pygame.display.flip()
+
+
+pygame.quit()
