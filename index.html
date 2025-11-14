@@ -1,49 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> <!-- this is ai generated :D -->
+<head> <!-- this is ai generated besides the python :D -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>python game ig</title>
+    <title>python ig</title>
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <style>
+        #game-container {
+            width: 1000px;
+            height: 600px;
+            background-color: #d25c23; /* Matching your original background color */
+            position: relative;
+            overflow: hidden; /* To keep player within bounds */
+        }
+        #player {
+            width: 50px;
+            height: 50px;
+            background-color: #0080ff; /* Matching your original player color */
+            position: absolute;
+        }
+    </style>
 </head>
 <body>
-    <h1>yay!</h1>
-    <div id="output"></div>
+    <h1>booyah</h1>
+    <div id="game-container">
+        <div id="player"></div>
+    </div>
+
     <py-script>
-        import pygame
+        from js import document, requestAnimationFrame, console
 
-        pygame.init() # Initialize Pygame
-
+        # Game variables
         screen_width = 1000
         screen_height = 600
-        screen = pygame.display.set_mode((screen_width, screen_height))
-        pygame.display.set_caption("Skbidi")
-
         player_x = 350
         player_y = 450
         player_speed = 5
         player_width = 50
         player_height = 50
-        player_color = (0, 128, 255)
 
-        running = True
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+        # Get DOM elements
+        player_element = document.getElementById("player")
+        game_container = document.getElementById("game-container")
 
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_LEFT]:
+        # Initial player position
+        player_element.style.left = f"{player_x}px"
+        player_element.style.top = f"{player_y}px"
+
+        # Key state tracking
+        keys_pressed = {
+            "ArrowLeft": False,
+            "ArrowRight": False,
+            "ArrowUp": False,
+            "ArrowDown": False,
+        }
+
+        def handle_keydown(event):
+            if event.key in keys_pressed:
+                keys_pressed[event.key] = True
+
+        def handle_keyup(event):
+            if event.key in keys_pressed:
+                keys_pressed[event.key] = False
+
+        document.addEventListener("keydown", handle_keydown)
+        document.addEventListener("keyup", handle_keyup)
+
+        def game_loop(timestamp):
+            nonlocal player_x, player_y
+
+            # Update player position based on keys
+            if keys_pressed["ArrowLeft"]:
                 player_x -= player_speed
-            if keys[pygame.K_RIGHT]:
+            if keys_pressed["ArrowRight"]:
                 player_x += player_speed
-            if keys[pygame.K_UP]:
+            if keys_pressed["ArrowUp"]:
                 player_y -= player_speed
-            if keys[pygame.K_DOWN]:
+            if keys_pressed["ArrowDown"]:
                 player_y += player_speed
 
-            # Boundary checks using correct variable names
+            # Boundary checks
             if player_x < 0:
                 player_x = 0
             if player_x > screen_width - player_width:
@@ -53,16 +90,13 @@
             if player_y > screen_height - player_height:
                 player_y = screen_height - player_height
 
-            screen.fill((210, 92, 35))
-            pygame.draw.rect(screen, player_color, (player_x, player_y, player_width, player_height))
-            pygame.display.flip()
+            # Update player element style
+            player_element.style.left = f"{player_x}px"
+            player_element.style.top = f"{player_y}px"
 
-        pygame.quit() # Call pygame.quit() after the loop
+            requestAnimationFrame(game_loop)
+
+        requestAnimationFrame(game_loop)
     </py-script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            console.log("tis game is ready!");
-        });
-    </script>
 </body>
 </html>
